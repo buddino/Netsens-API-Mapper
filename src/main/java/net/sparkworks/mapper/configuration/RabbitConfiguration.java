@@ -7,12 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
 @Configuration
-@PropertySource("application.yml")
+@PropertySource(value = "file:application.properties", ignoreResourceNotFound = false)
 public class RabbitConfiguration {
 
     private static final Logger LOGGER = Logger.getLogger(RabbitConfiguration.class);
@@ -27,6 +28,11 @@ public class RabbitConfiguration {
     String rabbitPassword;
 
     @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
     ConnectionFactory connectionFactory() throws KeyManagementException, NoSuchAlgorithmException {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitServer);
         connectionFactory.setPort(Integer.parseInt(rabbitPort));
@@ -34,4 +40,5 @@ public class RabbitConfiguration {
         connectionFactory.setPassword(rabbitPassword);
         return connectionFactory;
     }
+
 }

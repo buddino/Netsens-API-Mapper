@@ -24,11 +24,11 @@ public class SenderService {
 
     @Autowired
     RabbitTemplate rabbitTemplate;
-    
+
     @Async
     public void sendMeasurement(final String uri, final Double reading, final long timestamp) {
         final String message = String.format(Locale.US, MESSAGE_TEMPLATE, uri, reading, timestamp);
         rabbitTemplate.send(rabbitQueueSend, rabbitQueueSend, new Message(message.getBytes(), new MessageProperties()));
-        System.out.println(message.toString());
+        //System.out.println(message.toString());
     }
 }

@@ -9,12 +9,10 @@ import java.util.Map;
 @Service
 public class NetSensConverter {
 
+    @Value("${netsens.baseURI}")
+    String baseURI;
     private Map<String, String> unitMap;
     private Map<String, MeasureMapper> meterMap;
-
-    @Value("${netsens.baseURI}")
-    private String baseURI;
-
     private Measure current = new Measure("cur", "mA", 10.0);
     private Measure voltage = new Measure("voltage", "mV", 10.0);
     private Measure activePower = new Measure("actp", "mW", 10.0);
