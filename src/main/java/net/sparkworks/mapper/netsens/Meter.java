@@ -1,6 +1,9 @@
 package net.sparkworks.mapper.netsens;
 
+import org.joda.time.DateTime;
+
 import javax.xml.bind.annotation.XmlAttribute;
+import java.util.Locale;
 
 public class Meter {
     private String id;
@@ -46,12 +49,12 @@ public class Meter {
 
     @Override
     public String toString() {
-        return "Meter{" +
-                "id='" + id + '\'' +
-                ", unit='" + unit + '\'' +
-                ", value=" + value +
-                ", timestamp=" + timestamp +
-                '}';
+		return "{" +
+				"id: '" + id + '\'' +
+				", unit:' " + unit + '\'' +
+				", value: " + value +
+				", timestamp: " + (new DateTime(Long.parseLong(timestamp))).toString("dd/MM/YYYY HH:mm:ss", Locale.ITALY) +
+				'}';
     }
 }
 

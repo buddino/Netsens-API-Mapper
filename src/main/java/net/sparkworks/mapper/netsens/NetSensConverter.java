@@ -1,5 +1,6 @@
 package net.sparkworks.mapper.netsens;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -8,20 +9,21 @@ import java.util.Map;
 
 @Service
 public class NetSensConverter {
+	private static final Logger LOGGER = Logger.getRootLogger();
 
     @Value("${netsens.baseURI}")
     String baseURI;
     private Map<String, String> unitMap;
     private Map<String, MeasureMapper> meterMap;
     private Measure current = new Measure("cur", "mA", 10.0);
-    private Measure voltage = new Measure("voltage", "mV", 10.0);
-    private Measure activePower = new Measure("actp", "mW", 10.0);
-    private Measure reactivePower = new Measure("reactp", "mVAR", 10.0);
-    private Measure apparentPower = new Measure("appp", "mVA", 10.0);
-    private Measure powerfactor = new Measure("pf", "", 0.001);
-    private Measure activeEnergy = new Measure("actcon", "mWh", 10.0);
-    private Measure reactiveEnergy = new Measure("reactcon", "mVARh", 10.0);
-    private Measure apparentEnergy = new Measure("appcon", "mVAh", 10.0);
+	private Measure voltage = new Measure("vol", "mV", 10.0);
+	private Measure activePower = new Measure("actpw", "mW", 10.0);
+	private Measure reactivePower = new Measure("reactpw", "mVAR", 10.0);
+	private Measure apparentPower = new Measure("appw", "mVA", 10.0);
+	private Measure powerfactor = new Measure("pwf", "", 0.001);
+	private Measure activeEnergy = new Measure("con", "mWh", 10.0);
+	private Measure reactiveEnergy = new Measure("reactcon", "mVARh", 10.0);
+	private Measure apparentEnergy = new Measure("apcon", "mVAh", 10.0);
 
     //TODO Load mapping from properties file
     public NetSensConverter() {
@@ -146,8 +148,8 @@ public class NetSensConverter {
             MeasureMapper measureMapper = meterMap.get(meterName);
             return measureMapper.getScaleFactor() * value;
         } else {
-            System.err.println("\"" + meterName + "\" not found");
-            return 0.0;
+			LOGGER.error("\"" + meterName + "\" not found");
+			return 0.0;
         }
     }
 

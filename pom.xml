@@ -5,10 +5,10 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.sparkworks</groupId>
-    <artifactId>device-measureMapper-template</artifactId>
+    <groupId>it.unifi.dinfo</groupId>
+    <artifactId>Netsens-API-Mapper</artifactId>
     <packaging>jar</packaging>
-    <name>SparkWorks Device Mapper</name>
+    <name>Netsens Device Mapper</name>
     <description>Netsens API-Mapper</description>
     <version>1.0-SNAPSHOT</version>
     <properties>
@@ -38,6 +38,11 @@
             <id>sensorflare</id>
             <url>http://maven.sensorflare.com/nexus/content/repositories/snapshots</url>
         </repository>
+        <repository>
+            <id>in-project</id>
+            <name>In Project Repo</name>
+            <url>file://${project.basedir}/libs</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -53,18 +58,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
@@ -82,8 +76,62 @@
             <version>1.6</version>
         </dependency>
 
-        <!-- For Sensorflare -->
         <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>2.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20090211</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.esotericsoftware.yamlbeans</groupId>
+            <artifactId>yamlbeans</artifactId>
+            <version>1.09</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>it.unifi.dinfo</groupId>-->
+        <!--<artifactId>swagger-java-client</artifactId>-->
+        <!--<version>1.0.0</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-java-client</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>2.0.11.RELEASE</version>
+        </dependency>
+
+        <!-- For Sensorflare -->
+        <!--<dependency>
             <groupId>com.sensorflare</groupId>
             <artifactId>common</artifactId>
             <version>1.0-SNAPSHOT</version>
@@ -106,7 +154,7 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
-        </dependency>
+        </dependency>-->
 
         <!--ADDITIONALS-->
         <dependency>
@@ -130,8 +178,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -141,7 +189,7 @@
                 <configuration>
                     <mainClass>net.sparkworks.mapper.Application</mainClass>
                     <layout>ZIP</layout>
-                    <finalName>device-measureMapper-synfield</finalName>
+                    <finalName>Netsens-API-Mapper</finalName>
                 </configuration>
                 <executions>
                     <execution>
@@ -152,6 +200,11 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
 </project>
 
