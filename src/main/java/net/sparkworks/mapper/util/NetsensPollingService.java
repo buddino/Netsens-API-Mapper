@@ -99,12 +99,13 @@ public class NetsensPollingService {
 			//If it is possible to read the latest value stored in the GAIA platform send all the new values
 			if (latestResource != null) {
 				LOGGER.debug(latestResource.getUri() + ": " + sdf.format(latestResource.getLatestTime()));
-				List<Meter> meterList = netsens.getTimerangeMeasurement(meterUri, latestResource.getLatestTime(), now);
-				for (Meter meter : meterList) {
+				List<Meter> measurementList = netsens.getTimerangeMeasurement(meterUri, latestResource.getLatestTime(), now);
+				for (Meter measurement : measurementList) {
 					if (messageSentForMeter >= MAX_MESSAGES) {
-						LOGGER.debug(String.format("Sent %d messages [%s - %s]", messageSentForMeter, meterUri, meter.getTimestamp()));
+						LOGGER.debug(String.format("Sent %d messages [%s - %s]", messageSentForMeter, meterUri, measurement.getTimestamp()));
+						break;
 					}
-					send(resUri, Double.parseDouble(meter.getValue()) * scaleFactor, Long.parseLong(meter.getTimestamp()));
+					send(resUri, Double.parseDouble(measurement.getValue()) * scaleFactor, Long.parseLong(measurement.getTimestamp()));
 				}
 			}
 			//If it is not possible to read the latest value from the GAIA platform then send only the latest value and WARN
