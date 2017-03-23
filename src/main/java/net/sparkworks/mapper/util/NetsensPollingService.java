@@ -100,12 +100,16 @@ public class NetsensPollingService {
 			if (latestResource != null) {
 				LOGGER.debug(latestResource.getUri() + ": " + sdf.format(latestResource.getLatestTime()));
 				List<Meter> measurementList = netsens.getTimerangeMeasurement(meterUri, latestResource.getLatestTime(), now);
-				for (Meter measurement : measurementList) {
+				for (Meter meter : measurementList) {
 					if (messageSentForMeter >= MAX_MESSAGES) {
-						LOGGER.debug(String.format("Sent %d messages [%s - %s]", messageSentForMeter, meterUri, measurement.getTimestamp()));
+						LOGGER.debug(String.format("Sent %d messages [%s - %s]", messageSentForMeter, meterUri, meter.getTimestamp()));
 						break;
 					}
-					send(resUri, Double.parseDouble(measurement.getValue()) * scaleFactor, Long.parseLong(measurement.getTimestamp()));
+					if (meter.getId().equals("Temperatura aria") && meter.getValue().equals("0")) {
+						LOGGER.warn(meterUri + ": Zero temperature found, not sending");
+					} else {
+						send(resUri, Double.parseDouble(meter.getValue()) * scaleFactor, Long.parseLong(meter.getTimestamp()));
+					}
 				}
 			}
 			//If it is not possible to read the latest value from the GAIA platform then send only the latest value and WARN
@@ -113,7 +117,12 @@ public class NetsensPollingService {
 				Meter meter = netsens.getLatestMeasurement(meterUri);
 				if (meter != null) {
 					LOGGER.debug("Sending only latest value for: " + meterUri);
-					send(resUri, Double.parseDouble(meter.getValue()) * scaleFactor, Long.parseLong(meter.getTimestamp()));
+					//Check if we are dealing with temperaturem if true discar zero values
+					if (meter.getId().equals("Temperatura aria") && meter.getValue().equals("0")) {
+						LOGGER.warn(meterUri + ": Zero temperature found, not sending");
+					} else {
+						send(resUri, Double.parseDouble(meter.getValue()) * scaleFactor, Long.parseLong(meter.getTimestamp()));
+					}
 				} else {
 					LOGGER.warn("No measurements for meter: " + meterUri);
 				}
@@ -162,7 +171,6 @@ public class NetsensPollingService {
 		}
 		return null;
 	}
-
 
 
 }
